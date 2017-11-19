@@ -1,0 +1,23 @@
+{
+  "name": "node-server",
+  "version": "0.0.0",
+  "description": "NodeServer",
+  "main": "server.js",
+  "author": {
+    "name": "Алексей"
+  },
+  "dependencies": {
+    "connect-flash": "0.1.1",
+    "cookie-parser": "1.4.3",
+    "express-handlebars": "3.0.0",
+    "handlebars": "4.0.11",
+    "express-messages": "1.0.1",
+    "express-session": "1.15.6",
+    "express-validator": "4.3.0",
+    "body-parser": "1.18.2",
+    "consolidate": "0.14.5",
+    "express": "4.16.2",
+    "pg": "7.3.0"
+  }
+}
+

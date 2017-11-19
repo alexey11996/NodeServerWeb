@@ -1,0 +1,28 @@
+{{#animal}}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-12">
+            <h3>
+                <strong>{{a_name}}</strong>
+            </h3>
+                <br />
+                <br />
+                <img src="{{a_photo}}" class="img-rounded" width="400" height="200">
+            <br />
+            <br />
+        </div>
+
+        <h4>Description: {{a_descr}}</h4>
+        <br />
+        <br />
+        <h4>Price: {{a_price}}</h4>
+        <button class="btn btn-default add-to-order" data-id="{{a_id}}" data-petname="{{a_name}}">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Add to Order
+        </button>
+        <!--<button class="btn btn-default add-to-favourite" data-id="{{a_id}}">
+            <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+        </button>-->
+    </div>
+    </div>
+</div>
+{{/animal}}
