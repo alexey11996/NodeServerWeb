@@ -80,11 +80,6 @@ app.post('/register', function(req, res){
     var password = req.body.password;
     var password2 = req.body.password2;
 
-    //var price = 0;
-    //var status = 'In Progress';
-    //var adress = '';
-    //var paytype = 'Cache';
-
     // Validation
     req.checkBody('name', 'Name is required').notEmpty();
     req.checkBody('email', 'Email is required').notEmpty();
@@ -106,8 +101,17 @@ app.post('/register', function(req, res){
         })
         pool.query('INSERT INTO public."User" (u_id, u_fio, u_email, u_pass, u_phone) VALUES ((SELECT MAX(u_id + 1) FROM public."User"), $1, $2, $3, $4)', 
             [name, email, password, phone_number],  (error, response) => {
-            pool.end();
+            //pool.end();
             })
+        
+        var price = '0';
+        var status = 'In Progress';
+        var adress = 'Default';
+        var paytype = 'Cache';
+        pool.query('INSERT INTO public."Order" (o_id, u_id, o_price, o_status, o_adress, o_paytype) VALUES ((SELECT MAX(o_id+1) FROM public."Order"), (SELECT u_id FROM public."User" WHERE u_fio LIKE $1), $2, $3, $4, $5)',
+        [name, price, status, adress, paytype], (error, response) => {
+            pool.end();
+        });
         req.flash('success_msg', 'You are registered and can now login');
         res.redirect('/login');
     }  
@@ -165,7 +169,26 @@ app.get('/', function (req, res) {
 });
 
 app.get('/profile', function(req, res){
-    res.render('profile');
+    var username = res.locals.user;
+    const pool = new Pool({
+        connectionString: connectionString,
+    })
+    pool.query('SELECT * FROM public.profile WHERE u_fio LIKE $1', [username], (error, response) => {
+        res.render('profile', {profile : response.rows});
+        pool.end();
+    })
+});
+
+app.get('/shoppingCart', function(req, res){
+    var username = res.locals.user;
+    const pool = new Pool({
+        connectionString: connectionString,
+    })
+    pool.query('SELECT * FROM public.animal WHERE a_name in (SELECT ord_item_name FROM public."order_item" WHERE o_id = (SELECT o_id FROM public."Order" WHERE u_id = (SELECT u_id FROM public."User" WHERE u_fio LIKE $1)))',
+        [username], (error, response) => {
+        res.render('shoppingCart', {animal : response.rows});
+        pool.end();
+    })
 });
 
 app.get('/particularPat', function(req, res){
@@ -216,42 +239,24 @@ app.post('/addToOrder/:id/:petname', function(req, res){
     var id = req.params.id; // animal's id (product)
     var petname = req.params.petname;
 
-    var count = 0;
-
-    var price = 0;
-    var status = 'In Progress';
-    var adress = '';
-    var paytype = 'Cache';
-
-    console.log(username + ' ' + id  + ' ' + petname);
-
-    pool.query('SELECT count(*) FROM public."Order" WHERE u_id = (SELECT u_id FROM public."User" WHERE u_fio LIKE $1)', [username], (error, response) => {
-        console.log(response)
-        var mystring = JSON.stringify(response.rows[0]);
-        var objectValue = JSON.parse(mystring);
-        count = objectValue['count'];
-        console.log(count);
-    });
-    if (count = 0 ){
-        pool.query('INSERT INTO public."Order" (o_id, u_id, o_price, o_status, o_adress, o_paytype) VALUES ((SELECT MAX(o_id+1) FROM public."Order"), (SELECT u_id FROM public."User" WHERE u_fio LIKE $1), $2, $3, $4, $5)',
-        [username, price, status, adress, paytype], (error, response) => {
-            pool.end();
-        });
-
         pool.query('INSERT INTO public."order_item" (ord_item_id, o_id, ord_item_name) VALUES ((SELECT MAX((ord_item_id::int)+1) FROM public."order_item"), (SELECT o_id FROM public."Order" WHERE u_id = (SELECT u_id FROM public."User" WHERE u_fio LIKE $1)), $2)',
         [username, petname], (error, response) => {
             res.sendStatus(200);
             pool.end();
-        });
-    }
-    else 
-    {
-        pool.query('INSERT INTO public."order_item" (ord_item_id, o_id, ord_item_name) VALUES ((SELECT MAX((ord_item_id::int)+1) FROM public."order_item"), (SELECT o_id FROM public."Order" WHERE u_id = (SELECT u_id FROM public."User" WHERE u_fio LIKE $1)), $2)',
+        });    
+});
+
+app.delete('/deleteFromOrder/:petname', function(req, res){
+    const pool = new Pool({
+        connectionString: connectionString,
+    })
+    var username = res.locals.user;
+    var petname = req.params.petname;
+    pool.query('DELETE FROM public."order_item" WHERE o_id = (SELECT o_id FROM public."Order" WHERE u_id = (SELECT u_id FROM public."User" WHERE u_fio LIKE $1)) AND ord_item_name LIKE $2', 
         [username, petname], (error, response) => {
         res.sendStatus(200);
         pool.end();
-        });
-    }
+    });
 });
 
 app.post('/edit', function(req, res){
@@ -279,7 +284,7 @@ app.get('/logout', function(req, res){
     res.redirect('/login');
 });
 
-app.listen(3001, function () {
+app.listen(3000, function () {
     console.log('Server started on port 3000');
 });
 

@@ -1,0 +1,41 @@
+{{#if animal}}
+{{#animal}}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-12">
+            <h3>
+                <strong>{{a_name}}</strong>
+            </h3>
+            <br />
+            <img src="{{a_photo}}" class="img-rounded" width="300" height="100">
+            <br />
+            <br />
+        </div>
+
+        <h4>Description: {{a_descr}}</h4>
+        <br />
+        <h4>Price: {{a_price}} 
+        <button class="btn btn-danger delete-cat-from-order" data-petname="{{a_name}}">
+    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete From Order
+</button></h4>
+
+    </div>
+
+</div>
+{{/animal}}
+
+<button class="btn btn-default">
+    <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Make Order
+</button>
+
+{{else}}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-12">
+            <h3>
+                Nothing to show... First add some animals to your Order
+            </h3>
+    </div>
+</div>
+    </div>
+{{/if}}

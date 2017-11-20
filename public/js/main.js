@@ -22,8 +22,7 @@ $(document).ready(function () {
         $('#edit-form-photo').val($(this).attr('data-photo'));
         $('#edit-form-description').val($(this).attr('data-description'));
         $('#edit-form-price').val($(this).attr('data-price'));
-        $('#edit-form-id').val($(this).attr('data-id'));
-        //$('#edit-form-u-id').val($(this).attr('data-u_id'));    
+        $('#edit-form-id').val($(this).attr('data-id'));   
     });
 
     $('.add-to-order').on('click', function () {
@@ -35,9 +34,24 @@ $(document).ready(function () {
                 url: url,
                 type: 'POST',
                 success: function (result) {
-                    alert('Added To Order.')
-                    //console.log('Deleting cat..');
-                    //window.location.href = "/";
+                    //alert('Added To Order.')
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        };
+    });
+
+    $('.delete-cat-from-order').on('click', function () {
+        var petname = $(this).data('petname');
+        var url = '/deleteFromOrder/' + petname;
+        if (confirm('Delete Cat From your Order?')) {
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                success: function (result) {
+                    window.location.href = "/shoppingCart";
                 },
                 error: function (err) {
                     console.log(err);

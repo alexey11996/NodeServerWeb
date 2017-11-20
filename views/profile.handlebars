@@ -1,1 +1,21 @@
-My Profile...
+{{#profile}}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-12">
+            <h3>
+                Name: {{u_fio}}
+            </h3>
+            <h3>
+                Email: {{u_email}}
+            </h3>
+            <h3>
+                Mobile Number: {{u_phone}}
+            </h3>
+            <br />
+        </div>
+        <a href="/shoppingCart" class="btn btn-default" >
+            <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> My Shopping Cart
+        </a>
+    </div>
+</div>
+{{/profile}}
