@@ -108,8 +108,8 @@ app.post('/register', function(req, res){
         var status = 'In Progress';
         var adress = 'Default';
         var paytype = 'Cache';
-        pool.query('INSERT INTO public."Order" (o_id, u_id, o_price, o_status, o_adress, o_paytype) VALUES ((SELECT MAX(o_id+1) FROM public."Order"), (SELECT u_id FROM public."User" WHERE u_fio LIKE $1), $2, $3, $4, $5)',
-        [name, price, status, adress, paytype], (error, response) => {
+        pool.query('INSERT INTO public."Order" (o_id, u_id, o_price, o_status, o_adress, o_paytype) VALUES ((SELECT MAX(o_id+1) FROM public."Order"), (SELECT MAX(o_id+1) FROM public."Order"), $1, $2, $3, $4)',
+        [price, status, adress, paytype], (error, response) => {
             pool.end();
         });
         req.flash('success_msg', 'You are registered and can now login');
