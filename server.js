@@ -12,7 +12,9 @@ var express = require('express'),
 
 const { Pool } = require('pg');
 
-var connectionString = "postgres://postgres:123@localhost:1111/fluffypet1";
+//var connectionString = "postgres://postgres:123@localhost:1111/fluffypet1";
+
+var connectionString = "postgres://kibinsatmgqnox:b6dc4a64188ea91b4990409646b9a90698a440b1b7b3c80c216d5bf685efaa7d@ec2-54-195-241-106.eu-west-1.compute.amazonaws.com:5432/daf7n652375h42";
 
 Handlebars.registerHelper('if_eq', function(a, b, opts) {
     if(a == b)
