@@ -105,9 +105,6 @@ app.post('/register', function(req, res){
             [name, email, password, phone_number],  (error, response) => {
             pool.end();
             })
-            const pool = new Pool({
-                connectionString: connectionString,
-            })
         var price = '0';
         var status = 'In Progress';
         var adress = 'Default';
