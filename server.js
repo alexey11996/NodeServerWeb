@@ -103,9 +103,11 @@ app.post('/register', function(req, res){
         })
         pool.query('INSERT INTO public."User" (u_id, u_fio, u_email, u_pass, u_phone) VALUES ((SELECT MAX(u_id + 1) FROM public."User"), $1, $2, $3, $4)', 
             [name, email, password, phone_number],  (error, response) => {
-            //pool.end();
+            pool.end();
             })
-        
+            const pool = new Pool({
+                connectionString: connectionString,
+            })
         var price = '0';
         var status = 'In Progress';
         var adress = 'Default';
