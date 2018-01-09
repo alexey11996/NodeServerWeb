@@ -25,6 +25,12 @@ $(document).ready(function () {
         $('#edit-form-id').val($(this).attr('data-id'));   
     });
 
+    $('.makingOrder').on('click', function () {
+            alert('Ваш заказ поступил в обработку! Ожидайте звонка менеджера!')
+            window.location.href = "/";
+
+    });
+
     $('.add-to-order').on('click', function () {
         var id = $(this).data('id');
         var petname = $(this).data('petname');
